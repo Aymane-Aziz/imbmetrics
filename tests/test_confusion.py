@@ -27,3 +27,12 @@ def test_labels_not_covering_data_matches_sklearn():
 def test_mismatched_lengths_raise():
     with pytest.raises(ValueError):
         confusion_matrix([0, 1, 1], [0, 1])
+        
+@pytest.mark.filterwarnings("ignore:A single label")
+def test_single_class_matches_sklearn():
+    y_true = [1, 1, 1]
+    y_pred = [1, 1, 1]
+    np.testing.assert_array_equal(
+        confusion_matrix(y_true, y_pred),
+        sk_cm(y_true, y_pred),
+    )
