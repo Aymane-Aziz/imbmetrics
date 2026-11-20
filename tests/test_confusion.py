@@ -16,3 +16,11 @@ def test_confusion_matrix_matches_sklearn(pos_rate, seed):
 def test_hand_example():
     result = confusion_matrix([0, 0, 0, 0, 1, 1], [0, 0, 1, 0, 1, 0])
     np.testing.assert_array_equal(result, [[3, 1], [1, 1]])
+    
+def test_labels_not_covering_data_matches_sklearn():
+    y_true = [0, 1, 2]
+    y_pred = [0, 1, 2]
+    np.testing.assert_array_equal(
+        confusion_matrix(y_true, y_pred, labels=[0, 1]),
+        sk_cm(y_true, y_pred, labels=[0, 1]),
+    )
