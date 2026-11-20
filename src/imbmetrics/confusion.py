@@ -1,5 +1,4 @@
 import numpy as np
-from numpy.char import index
 from numpy.typing import ArrayLike, NDArray
 
 
@@ -18,7 +17,6 @@ def confusion_matrix(
     y_pred = y_pred[mask]
     index = {label: i for i, label in enumerate(classes)}
     if labels is not None and not np.any(np.isin(labels, y_true)):
-        if not np.any(np.isin(labels, y_true)):
             raise ValueError("At least one label specified must be in y_true")
     true_idx = np.array([index[v] for v in y_true] )
     pred_idx = np.array([index[v] for v in y_pred])
