@@ -24,3 +24,6 @@ def test_labels_not_covering_data_matches_sklearn():
         confusion_matrix(y_true, y_pred, labels=[0, 1]),
         sk_cm(y_true, y_pred, labels=[0, 1]),
     )
+def test_mismatched_lengths_raise():
+    with pytest.raises(ValueError):
+        confusion_matrix([0, 1, 1], [0, 1])
