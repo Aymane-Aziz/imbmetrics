@@ -12,3 +12,7 @@ def test_confusion_matrix_matches_sklearn(pos_rate, seed):
     y_true = (rng.random(10_000) < pos_rate).astype(int)
     y_pred = (rng.random(10_000) < 0.1).astype(int)
     np.testing.assert_array_equal(confusion_matrix(y_true, y_pred), sk_cm(y_true, y_pred))
+    
+def test_hand_example():
+    result = confusion_matrix([0, 0, 0, 0, 1, 1], [0, 0, 1, 0, 1, 0])
+    np.testing.assert_array_equal(result, [[3, 1], [1, 1]])
