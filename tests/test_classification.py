@@ -37,3 +37,18 @@ def test_binary_matches_sklearn(pos_rate, seed):
     np.testing.assert_allclose(recall, sk_recall)
     np.testing.assert_allclose(f1, sk_f1)
     np.testing.assert_array_equal(support, sk_support)
+    
+@pytest.mark.parametrize("zero_division", [0, 1, np.nan])
+@pytest.mark.parametrize(
+    "y_true, y_pred",
+    [
+        ([0, 1], [0, 0]),
+        ([0, 0, 1, 1, 1], [0, 0, 0, 0, 0]),
+        ([0, 1, 2, 2], [0, 0, 0, 0]),
+    ],
+)
+def test_class_never_predicted_matches_sklearn(y_true, y_pred, zero_division):
+    ours = precision_recall_f1_support(y_true, y_pred, zero_division=zero_division)
+    theirs = sk_prfs(y_true, y_pred, zero_division=zero_division)
+    for a, b in zip(ours, theirs):
+        np.testing.assert_allclose(a, np.asarray(b))
