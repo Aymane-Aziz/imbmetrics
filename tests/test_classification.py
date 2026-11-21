@@ -52,3 +52,17 @@ def test_class_never_predicted_matches_sklearn(y_true, y_pred, zero_division):
     theirs = sk_prfs(y_true, y_pred, zero_division=zero_division)
     for a, b in zip(ours, theirs):
         np.testing.assert_allclose(a, np.asarray(b))
+        
+@pytest.mark.parametrize("seed", range(5))
+def test_multiclass_matches_sklearn(seed):
+    rng = np.random.default_rng(seed)
+    y_true = rng.choice(4, size=10_000, p=[0.9, 0.07, 0.025, 0.005])
+    y_pred = rng.choice(4, size=10_000, p=[0.8, 0.1, 0.09, 0.01])
+
+    precision, recall, f1, support = precision_recall_f1_support(y_true, y_pred)
+    sk_precision, sk_recall, sk_f1, sk_support = sk_prfs(y_true, y_pred, zero_division=0)
+
+    np.testing.assert_allclose(precision, sk_precision)
+    np.testing.assert_allclose(recall, sk_recall)
+    np.testing.assert_allclose(f1, sk_f1)
+    np.testing.assert_array_equal(support, sk_support)
