@@ -1,4 +1,6 @@
 import numpy as np
+import pytest
+from sklearn.metrics import precision_recall_fscore_support as sk_prfs
 
 from imbmetrics import precision_recall_f1_support
 
@@ -20,3 +22,18 @@ def test_asymmetric_hand_example():
     np.testing.assert_allclose(recall, [1 / 3, 1.0])
     np.testing.assert_allclose(f1, [0.5, 2 / 3])
     np.testing.assert_array_equal(support, [3, 2])
+    
+@pytest.mark.parametrize("pos_rate", [0.5, 0.05, 0.005])
+@pytest.mark.parametrize("seed", range(5))
+def test_binary_matches_sklearn(pos_rate, seed):
+    rng = np.random.default_rng(seed)
+    y_true = (rng.random(10_000) < pos_rate).astype(int)
+    y_pred = (rng.random(10_000) < 0.1).astype(int)
+
+    precision, recall, f1, support = precision_recall_f1_support(y_true, y_pred)
+    sk_precision, sk_recall, sk_f1, sk_support = sk_prfs(y_true, y_pred, zero_division=0)
+
+    np.testing.assert_allclose(precision, sk_precision)
+    np.testing.assert_allclose(recall, sk_recall)
+    np.testing.assert_allclose(f1, sk_f1)
+    np.testing.assert_array_equal(support, sk_support)
