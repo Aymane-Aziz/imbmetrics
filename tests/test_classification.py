@@ -77,3 +77,22 @@ def test_labels_subset_counts_all_samples():
     np.testing.assert_allclose(recall, [0.5, 1.0])
     np.testing.assert_allclose(f1, [2 / 3, 1.0])
     np.testing.assert_array_equal(support, [2, 1])
+    
+@pytest.mark.parametrize("zero_division", [0, 1, np.nan])
+@pytest.mark.parametrize("labels", [[0, 1], [1, 0], [3, 1], [2], [0, 1, 2, 3, 9], [9, 0]])
+def test_labels_match_sklearn(labels, zero_division):
+    rng = np.random.default_rng(0)
+    y_true = rng.choice(4, size=10_000, p=[0.9, 0.07, 0.025, 0.005])
+    y_pred = rng.choice(4, size=10_000, p=[0.8, 0.1, 0.09, 0.01])
+
+    precision, recall, f1, support = precision_recall_f1_support(
+        y_true, y_pred, labels=labels, zero_division=zero_division
+    )
+    sk_precision, sk_recall, sk_f1, sk_support = sk_prfs(
+        y_true, y_pred, labels=labels, zero_division=zero_division
+    )
+
+    np.testing.assert_allclose(precision, sk_precision)
+    np.testing.assert_allclose(recall, sk_recall)
+    np.testing.assert_allclose(f1, sk_f1)
+    np.testing.assert_array_equal(support, sk_support)
