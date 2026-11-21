@@ -66,3 +66,14 @@ def test_multiclass_matches_sklearn(seed):
     np.testing.assert_allclose(recall, sk_recall)
     np.testing.assert_allclose(f1, sk_f1)
     np.testing.assert_array_equal(support, sk_support)
+    
+def test_labels_subset_counts_all_samples():
+    y_true = [0, 0, 1]
+    y_pred = [0, 2, 1]
+    precision, recall, f1, support = precision_recall_f1_support(
+        y_true, y_pred, labels=[0, 1]
+    )
+    np.testing.assert_allclose(precision, [1.0, 1.0])
+    np.testing.assert_allclose(recall, [0.5, 1.0])
+    np.testing.assert_allclose(f1, [2 / 3, 1.0])
+    np.testing.assert_array_equal(support, [2, 1])
