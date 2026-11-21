@@ -36,3 +36,11 @@ def test_single_class_matches_sklearn():
         confusion_matrix(y_true, y_pred),
         sk_cm(y_true, y_pred),
     )
+@pytest.mark.filterwarnings("ignore:A single label")
+def test_labels_present_in_true_but_all_samples_dropped():
+    y_true = [5]
+    y_pred = [0]
+    np.testing.assert_array_equal(
+        confusion_matrix(y_true, y_pred, labels=[5]),
+        sk_cm(y_true, y_pred, labels=[5]),
+    )
