@@ -45,3 +45,20 @@ def precision_recall_curve(
         np.concatenate([recall[::-1], [0.0]]),
         scores[last_of_each_score][::-1],
     )
+    
+def average_precision(
+    y_true: ArrayLike,
+    y_score: ArrayLike,
+    pos_label: int | str | bool = 1,
+) -> float:
+    precision, recall, _ = precision_recall_curve(y_true, y_score, pos_label)
+    return float(max(0.0, -np.sum(np.diff(recall) * precision[:-1])))
+
+
+def pr_auc_trapezoid(
+    y_true: ArrayLike,
+    y_score: ArrayLike,
+    pos_label: int | str | bool = 1,
+) -> float:
+    precision, recall, _ = precision_recall_curve(y_true, y_score, pos_label)
+    return float(-np.sum(np.diff(recall) * (precision[1:] + precision[:-1]) / 2))
