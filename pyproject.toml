@@ -5,8 +5,24 @@ build-backend = "hatchling.build"
 [project]
 name = "imbmetrics"
 version = "0.1.0"
+description = "Evaluation metrics for imbalanced classification: per-class precision/recall/F1, PR-AUC, confusion matrix and threshold analysis."
+readme = "README.md"
 requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Aymane Aziz" }]
+keywords = ["machine-learning", "imbalanced-data", "metrics", "precision-recall", "classification"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Typing :: Typed",
+]
 dependencies = ["numpy>=1.26"]
+
+[project.urls]
+Homepage = "https://github.com/Aymane-Aziz/imbmetrics"
+Issues = "https://github.com/Aymane-Aziz/imbmetrics/issues"
 
 [project.optional-dependencies]
 dev = ["pytest", "scikit-learn", "mypy", "ruff"]
