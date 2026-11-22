@@ -1,6 +1,8 @@
+from typing import Literal
+
 import numpy as np
 from numpy.typing import ArrayLike, NDArray
-from typing import Literal
+
 from imbmetrics.confusion import confusion_matrix
 
 
